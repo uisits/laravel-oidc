@@ -1,0 +1,54 @@
+{
+    "name": "uisits/laravel-oidc",
+    "description": "Shibboleth OIDC driver for Laravel Socialite",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "Laravel", "Socialite", "Shibboleth", "Laravel Socialite Shibboleth Provider"
+    ],
+    "support": {
+        "issues": "https://github.com/uisits/laravel-oidc/issues",
+        "source": "https://github.com/uisits/laravel-oidc"
+    },
+    "authors": [
+        {
+            "name": "Chinwal, Prasad"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^9.0",
+        "illuminate/filesystem": "^9.0",
+        "laravel/socialite": "^5.6"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10",
+        "pestphp/pest": "^1.0|^2.6",
+        "pestphp/pest-plugin-laravel": "^1.0|^2.0",
+        "mockery/mockery": "^1.5",
+        "phpunit/phpunit": "^9.0|^10.1",
+        "orchestra/testbench": "^7.24|^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "UisIts\\Oidc\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "UisIts\\Oidc\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+              "UisIts\\Oidc\\ShibbolethServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
