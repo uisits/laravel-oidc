@@ -1,10 +1,10 @@
 <?php
 
-namespace PrasadChinwal\Shibboleth\Test;
+namespace UisIts\Oidc\Test;
 
 use Closure;
 use Orchestra\Testbench\TestCase as Orchestra;
-use PrasadChinwal\Shibboleth\ShibbolethServiceProvider;
+use UisIts\Oidc\ShibbolethServiceProvider;
 
 abstract class TestCase extends Orchestra
 {

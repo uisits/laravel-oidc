@@ -11,7 +11,7 @@
 |
 */
 
-use PrasadChinwal\Shibboleth\Test\TestCase;
+use UisIts\Oidc\Test\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
 

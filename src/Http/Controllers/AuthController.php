@@ -1,14 +1,17 @@
 <?php
 
-namespace UisIts\Oidc\Actions;
+namespace UisIts\Oidc\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Spatie\Permission\Models\Role;
 
-class AuthHandler
+class AuthController
 {
+    /**
+     * Redirect login to oidc provider
+     */
     public function login(): \Illuminate\Http\RedirectResponse
     {
         return Socialite::driver(config('shibboleth.type'))->redirect();

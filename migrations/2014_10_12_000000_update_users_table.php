@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('first_name')->after('name');
             $table->string('last_name')->after('first_name');
             $table->string('uin', 9)->unique()->after('last_name');
-            $table->string('token', 600)->nullable();
-            $table->string('remember_token', 600)->change();
+            $table->longText('token')->nullable();
+            $table->longText('remember_token')->change();
         });
     }
 

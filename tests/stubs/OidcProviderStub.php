@@ -1,6 +1,6 @@
 <?php
 
-namespace PrasadChinwal\Shibboleth\Test\stubs;
+namespace UisIts\Oidc\Test\stubs;
 
 use GuzzleHttp\RequestOptions;
 use Illuminate\Auth\AuthenticationException;

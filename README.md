@@ -4,9 +4,9 @@ This package extends the Laravel's first-party package socialite to authenticate
 
 ## Usage:
 - Install the package:
-```composer require prasadchinwal/laravel-shibboleth```
+```composer require uisits/laravel-oidc```
 - Optional: Add Service provider to `config/app.php` file.
-```prasadchinwal/shibboleth/ShibbolethServiceProvider::class```
+```UisIts/Oidc/ShibbolethServiceProvider::class```
 - Install the package:
 ``` php artisan shibboleth:install```
 - Set environment variables in .env file (Check the `config/shibboleth.php` file)
@@ -45,10 +45,13 @@ Run `php artisan migrate`
 #### Set up authentication routes
 set the authentication routes in `routes/web.php` files
 ```php
-use PrasadChinwal\Shibboleth\Actions\AuthHandler;
-Route::name('login')->get('login', [AuthHandler::class, 'login']);
-Route::name('callback')->get('/auth/callback', [AuthHandler::class, 'callback']);
-Route::name('logout')->get('/logout', [AuthHandler::class, 'logout']);
+use UisIts\Oidc\Http\Controllers\AuthController;
+
+Route::name('login')->get('login', [AuthController::class, 'login']);
+
+Route::name('callback')->get('/auth/callback', [AuthController::class, 'callback']);
+
+Route::name('logout')->get('/logout', [AuthController::class, 'logout']);
 ```
 
 #### Authorization
@@ -81,7 +84,7 @@ For token introspection using OIDC add the following middleware to the `app/Http
 
 Under `alias` property:
 ```php
-'introspect' => \PrasadChinwal\Shibboleth\Http\Middleware\Introspect::class,
+'introspect' => \UisIts\Oidc\Http\Middleware\Introspect::class,
 ```
 
 Now you can use the middleware on your protected route as such:
@@ -106,4 +109,4 @@ You can run the tests for the package using pest.
 
 ## Issues and Concerns
 Please open an issue on the GitHub repository with detailed description and logs (if available).
-> In case of security concerns please write an email to [PrasadChinwal](prasadchinwal5@gmail.com). 
+> In case of security concerns please write an email to [UIS ITS ADDS Team](uisappdevdl@uis.edu). 

@@ -5,8 +5,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Two\User;
-use PrasadChinwal\Shibboleth\Test\stubs\OidcProviderStub;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
+use UisIts\Oidc\Test\stubs\OidcProviderStub;
 
 beforeEach(function () {
     $this->codeVerifier = null;
