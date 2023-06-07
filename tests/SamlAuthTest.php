@@ -2,8 +2,8 @@
 
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Two\User;
-use PrasadChinwal\Shibboleth\Test\stubs\SamlProviderStub;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
+use UisIts\Oidc\Test\stubs\SamlProviderStub;
 
 beforeEach(function () {
 

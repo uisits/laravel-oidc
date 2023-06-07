@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use UisIts\Oidc\Actions\AuthHandler;
+use UisIts\Oidc\Http\Controllers\AuthController;
 
-Route::name('login')->get('login', [AuthHandler::class, 'login']);
+Route::namespace('UisIts\Oidc\Http\Controllers')->middleware(['web'])->group(function () {
+    Route::name('login')->get('login', [AuthController::class, 'login']);
 
-Route::name('callback')->get('/auth/callback', [AuthHandler::class, 'callback']);
+    Route::name('callback')->get('/auth/callback', [AuthController::class, 'callback']);
 
-Route::name('logout')->get('/logout', [AuthHandler::class, 'logout']);
+    Route::name('logout')->get('/logout', [AuthController::class, 'logout']);
+});

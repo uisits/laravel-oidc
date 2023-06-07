@@ -1,8 +1,8 @@
 <?php
 
 use Laravel\Socialite\Contracts\Factory;
-use PrasadChinwal\Shibboleth\Oidc\ShibbolethOidcProvider;
-use PrasadChinwal\Shibboleth\Saml\ShibbolethSamlProvider;
+use UisIts\Oidc\Oidc\ShibbolethOidcProvider;
+use UisIts\Oidc\Saml\ShibbolethSamlProvider;
 
 test('can instantiate oidc provider', function () {
     $factory = app()->make(Factory::class);

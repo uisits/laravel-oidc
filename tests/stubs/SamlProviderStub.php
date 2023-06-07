@@ -1,13 +1,13 @@
 <?php
 
-namespace PrasadChinwal\Shibboleth\Test\stubs;
+namespace UisIts\Oidc\Test\stubs;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Two\User;
 use Mockery as m;
-use PrasadChinwal\Shibboleth\Saml\AbstractSamlProvider;
 use stdClass;
+use UisIts\Oidc\Saml\AbstractSamlProvider;
 
 class SamlProviderStub extends AbstractSamlProvider
 {
