@@ -7,7 +7,7 @@ This package extends the Laravel's first-party package socialite to authenticate
 ```composer require uisits/laravel-oidc```
 - Optional: Add Service provider to `config/app.php` file.
 ```UisIts/Oidc/ShibbolethServiceProvider::class```
-- Install the package:
+- **Important:** Install the package:
 ``` php artisan shibboleth:install```
 - Set environment variables in .env file (Check the `config/shibboleth.php` file)
 
