@@ -25,6 +25,7 @@ class AuthController
     public function callback()
     {
         $socialiteUser = Socialite::driver(config('shibboleth.type'))->user();
+
         $user = User::updateOrCreate([
             'uin' => $socialiteUser->uin,
         ], [
@@ -34,8 +35,9 @@ class AuthController
             'last_name' => $socialiteUser->last_name,
             'netid' => $socialiteUser->netid,
             'email' => $socialiteUser->email,
-            'token' => $socialiteUser->token,
-            'remember_token' => $socialiteUser->refreshToken,
+            'access_token' => $socialiteUser->token,
+            'id_token' => $socialiteUser->idToken,
+            'refresh_token' => $socialiteUser->refreshToken,
             'password' => $socialiteUser->password,
         ]);
 

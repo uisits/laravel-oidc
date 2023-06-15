@@ -3,15 +3,17 @@
 namespace UisIts\Oidc\Oidc;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Two\AbstractProvider;
+use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Two\ProviderInterface;
-use Laravel\Socialite\Two\User;
 
 final class ShibbolethOidcProvider extends AbstractProvider implements ProviderInterface
 {
@@ -40,6 +42,13 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
      * @var bool
      */
     protected $usesPKCE = true;
+
+    /**
+     * The cached user instance.
+     *
+     * @var \UisIts\Oidc\Oidc\User|null
+     */
+    protected $user;
 
     /**
      * Set the scopes
@@ -111,7 +120,7 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
     /**
      * Get the url to introspect user token
      */
-    protected function getIntrospectUrl(): ?string
+    protected function getIntrospectUrl(): string
     {
         if (empty(config('shibboleth.introspect.introspect_url'))) {
             throw new \ValueError('Introspect url not set in config');
@@ -144,6 +153,34 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
         }
 
         return $fields;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws GuzzleException
+     */
+    public function user()
+    {
+        if ($this->user) {
+            return $this->user;
+        }
+
+        if ($this->hasInvalidState()) {
+            throw new InvalidStateException;
+        }
+
+        $response = $this->getAccessTokenResponse($this->getCode());
+
+        $this->user = $this->mapUserToObject($this->getUserByToken(
+            $token = Arr::get($response, 'access_token')
+        ));
+
+        return $this->user->setToken($token)
+            ->setIdToken(Arr::get($response, 'id_token'))
+            ->setRefreshToken(Arr::get($response, 'refresh_token'))
+            ->setExpiresIn(Arr::get($response, 'expires_in'))
+            ->setApprovedScopes(explode($this->scopeSeparator, Arr::get($response, 'scope', '')));
     }
 
     protected function mapUserToObject(array $user): User
