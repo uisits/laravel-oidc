@@ -233,7 +233,7 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
         throw_if(! $user, AuthenticationException::class);
         $logout_url = config('shibboleth.oidc.logout_url');
         $response = $this->getHttpClient()->get($logout_url, [
-            RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$user->token],
+            RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$user->access_token],
         ]);
 
         if ($response->getStatusCode() === 200) {
