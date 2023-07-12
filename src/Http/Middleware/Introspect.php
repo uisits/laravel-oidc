@@ -6,14 +6,13 @@ use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
 
 class Introspect
 {
     /**
-     * @param \Closure(Request): (Response) $next
+     * @param  \Closure(Request): (Response)  $next
      * @param  string  ...$scopes
      *
      * @throws \Throwable
@@ -43,25 +42,10 @@ class Introspect
             $this->checkScopes($introspectResponse['scope'], $scopes);
         }
 
-        Session::put('introspect.username', $introspectResponse['username']);
+        Cache::put('introspect.username', $introspectResponse['username']);
+        Cache::put('introspect', encrypt($request->bearerToken()));
 
         return $next($request);
-    }
-
-    /**
-     * Check the scopes of the token
-     *
-     * @throws \Throwable
-     */
-    public function checkScopes(string $tokenScopes, string|array $scopes)
-    {
-        $scopes = collect($scopes);
-        $tokenScopes = collect(explode(' ', $tokenScopes));
-        $missingScopes = $scopes->diff($tokenScopes);
-
-        if ($missingScopes->isNotEmpty()) {
-            throw new \InvalidArgumentException("Missing scopes {$missingScopes->implode(',')}");
-        }
     }
 
     /**
@@ -94,5 +78,21 @@ class Introspect
         }
 
         return false;
+    }
+
+    /**
+     * Check the scopes of the token
+     *
+     * @throws \Throwable
+     */
+    public function checkScopes(string $newScopes, string|array $oldScopes): void
+    {
+        $oldScopes = collect($oldScopes);
+        $newScopes = collect(explode(' ', $newScopes));
+        $missingScopes = $oldScopes->diff($newScopes);
+
+        if ($missingScopes->isNotEmpty()) {
+            throw new \InvalidArgumentException("Missing scopes {$missingScopes->implode(',')}");
+        }
     }
 }
