@@ -42,10 +42,9 @@ class User extends AbstractUser
     /**
      * Set the token on the user.
      *
-     * @param  string  $token
      * @return $this
      */
-    public function setToken($token)
+    public function setToken(string $token): static
     {
         $this->token = $token;
 
@@ -57,7 +56,7 @@ class User extends AbstractUser
      *
      * @return $this
      */
-    public function setIdToken($idToken)
+    public function setIdToken(string $idToken): static
     {
         $this->idToken = $idToken;
 
@@ -67,10 +66,9 @@ class User extends AbstractUser
     /**
      * Set the refresh token required to obtain a new access token.
      *
-     * @param  string  $refreshToken
      * @return $this
      */
-    public function setRefreshToken($refreshToken)
+    public function setRefreshToken(string $refreshToken): static
     {
         $this->refreshToken = $refreshToken;
 
@@ -83,7 +81,7 @@ class User extends AbstractUser
      * @param  int  $expiresIn
      * @return $this
      */
-    public function setExpiresIn($expiresIn)
+    public function setExpiresIn($expiresIn): static
     {
         $this->expiresIn = $expiresIn;
 
@@ -93,10 +91,9 @@ class User extends AbstractUser
     /**
      * Set the scopes that were approved by the user during authentication.
      *
-     * @param  array  $approvedScopes
      * @return $this
      */
-    public function setApprovedScopes($approvedScopes)
+    public function setApprovedScopes(array $approvedScopes): static
     {
         $this->approvedScopes = $approvedScopes;
 

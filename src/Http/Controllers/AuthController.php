@@ -2,7 +2,6 @@
 
 namespace UisIts\Oidc\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Spatie\Permission\Models\Role;
@@ -26,7 +25,9 @@ class AuthController
     {
         $socialiteUser = Socialite::driver(config('shibboleth.type'))->user();
 
-        $user = User::updateOrCreate([
+        $userClass = config('auth.providers.users.model');
+
+        $user = $userClass::updateOrCreate([
             'uin' => $socialiteUser->uin,
         ], [
             'uin' => $socialiteUser->uin,
