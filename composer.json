@@ -41,7 +41,7 @@
     "extra": {
         "laravel": {
             "providers": [
-              "UisIts\\Oidc\\ShibbolethServiceProvider"
+                "UisIts\\Oidc\\ShibbolethServiceProvider"
             ]
         }
     },

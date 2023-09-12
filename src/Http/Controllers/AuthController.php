@@ -2,7 +2,6 @@
 
 namespace UisIts\Oidc\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Spatie\Permission\Models\Role;
@@ -25,7 +24,10 @@ class AuthController
     public function callback()
     {
         $socialiteUser = Socialite::driver(config('shibboleth.type'))->user();
-        $user = User::updateOrCreate([
+
+        $userClass = config('auth.providers.users.model');
+
+        $user = $userClass::updateOrCreate([
             'uin' => $socialiteUser->uin,
         ], [
             'uin' => $socialiteUser->uin,
@@ -34,8 +36,9 @@ class AuthController
             'last_name' => $socialiteUser->last_name,
             'netid' => $socialiteUser->netid,
             'email' => $socialiteUser->email,
-            'token' => $socialiteUser->token,
-            'remember_token' => $socialiteUser->refreshToken,
+            'access_token' => $socialiteUser->token,
+            'id_token' => $socialiteUser->idToken,
+            'refresh_token' => $socialiteUser->refreshToken,
             'password' => $socialiteUser->password,
         ]);
 
