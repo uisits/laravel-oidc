@@ -16,8 +16,8 @@
         }
     ],
     "require": {
-        "illuminate/support": "^9.0",
-        "illuminate/filesystem": "^9.0",
+        "illuminate/support": "^10.0",
+        "illuminate/filesystem": "^10.0",
         "laravel/socialite": "^5.6"
     },
     "require-dev": {
@@ -41,7 +41,7 @@
     "extra": {
         "laravel": {
             "providers": [
-              "UisIts\\Oidc\\ShibbolethServiceProvider"
+                "UisIts\\Oidc\\ShibbolethServiceProvider"
             ]
         }
     },
