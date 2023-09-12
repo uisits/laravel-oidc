@@ -89,14 +89,27 @@ Under `alias` property:
 
 Now you can use the middleware on your protected route as such:
 ```php
-Route::middleware(['introspect'])->get('/introspect', 'Controller@index')
-->name('introspect');
+use UisIts\Oidc\Http\Middleware\Introspect;
+
+Route::middleware(['introspect'])->get('/introspect', function (Request $request) {
+    dump($request->bearerToken());
+    dd(Introspect::getUserFromToken($request->bearerToken()));
+})->name('introspect');
 ```
-Note: Getting the user's netid from token
- 
-You can get the user's netid associated with token by:
+Note: Below is the response received when you get a user from token
 ```php
-Session::get('introspect.username');
+Introspect::getUserFromToken($request->bearerToken());
+
+array:8 [▼ // routes/api.php:24
+  "sub" => "xyz@abc.org"
+  "uisedu_is_member_of" => array:42 [▶]
+  "uisedu_uin" => "123456789"
+  "preferred_username" => "xyz"
+  "given_name" => "John"
+  "preferred_display_name" => "Doe, John"
+  "family_name" => "Doe"
+  "email" => "xyz@abc.org"
+];
 ```
 
 #### Code Style

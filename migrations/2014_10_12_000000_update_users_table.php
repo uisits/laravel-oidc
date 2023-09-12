@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('first_name')->after('name');
             $table->string('last_name')->after('first_name');
             $table->string('uin', 9)->unique()->after('last_name');
-            $table->longText('token')->nullable();
-            $table->longText('remember_token')->change();
+            $table->longText('access_token')->nullable()->after('password');
+            $table->longText('id_token')->nullable()->after('access_token');
+            $table->longText('refresh_token')->nullable()->after('id_token');
+            $table->dropColumn('remember_token');
         });
     }
 
@@ -27,6 +29,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->renameColumn('refresh_token', 'remember_token');
             $table->dropColumn(array_merge([
                 'netid',
                 'first_name',
