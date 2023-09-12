@@ -132,7 +132,7 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
     /**
      * {@inheritdoc}
      */
-    protected function getUserByToken($token)
+    public function getUserByToken($token)
     {
         $response = $this->getHttpClient()->get($this->getUserUrl(), [
             RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$token],
