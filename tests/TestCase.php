@@ -30,7 +30,7 @@ abstract class TestCase extends Orchestra
     {
         $app['config']->set('shibboleth.type', 'oidc');
 
-        // Oidc config
+        // AddOidcHeader config
         $app['config']->set('shibboleth.oidc.client_id', 'github-client-id');
         $app['config']->set('shibboleth.oidc.client_secret', 'client-id');
         $app['config']->set('shibboleth.oidc.auth_url', 'auth-url');

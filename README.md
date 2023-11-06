@@ -112,6 +112,32 @@ array:8 [▼ // routes/api.php:24
 ];
 ```
 
+#### Logging
+To help with easier logging this package sets a custom header `REMOTE_SERVER`
+using the middleware `\UisIts\Oidc\Http\Middleware\AddOidcMiddleware` class.
+It adds the `users netid` to `$_SERVER['REMOTE_USER']` and `$request->headers`.
+
+You can enable this by adding the `\UisIts\Oidc\Http\Middleware\AddOidcMiddleware::class`
+in the `app/Http/Kernel.php` file under the `$middleware` property.
+For example:
+```php
+protected $middleware = [
+    // \App\Http\Middleware\TrustHosts::class,
+    \App\Http\Middleware\TrustProxies::class,
+    \Illuminate\Http\Middleware\HandleCors::class,
+    \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+    \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+    \App\Http\Middleware\TrimStrings::class,
+    \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+    \UisIts\Oidc\Http\Middleware\AddOidcHeader::class,
+];
+```
+> Note:
+> 
+> To configure this behaviour you can create your own middleware using
+`php artisan make:middleware` and then extend your middleware with `AddOidcHeader`.
+Now you can override the `handle` method with your own implementation.
+
 #### Code Style
 You can use Laravel pint to automatically fix code styles.
 ```./vendor/bin/pint```

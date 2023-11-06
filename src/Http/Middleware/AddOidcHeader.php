@@ -1,0 +1,27 @@
+<?php
+
+namespace UisIts\Oidc\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class AddOidcHeader
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $response = $next($request);
+        $user = auth()->user();
+        if ($user) {
+            $response->headers->set('REMOTE_USER', $user->netid);
+            $_SERVER['REMOTE_USER'] = $user->netid;
+        }
+        return $response;
+    }
+}

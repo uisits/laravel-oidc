@@ -16,6 +16,10 @@ class ShibbolethServiceProvider extends SocialiteServiceProvider
             __DIR__.'/../config/shibboleth.php' => config_path('shibboleth.php'),
         ], 'shib-config');
 
+        $this->publishes([
+            __DIR__.'/../src/Http/Middleware/AddOidcHeader.php' => app_path('/Http/Middleware/AddOidcHeaderCustom.php'),
+        ], 'oidc-middleware');
+
         $this->loadRoutes();
 
         $this->loadMigrationsFrom(__DIR__.'/../migrations');

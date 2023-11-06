@@ -24,7 +24,7 @@ return [
         'user_url' => env('OIDC_USER_URL'),
         'logout_url' => env('OIDC_LOGOUT_URL'),
         'redirect' => env('APP_URL').'/auth/callback',
-        'scopes' => ['openid', 'profile', 'email', 'phone', 'address', 'offline_access'],
+        'scopes' => ['openid', 'profile', 'email', 'offline_access'],
     ],
 
     /*
