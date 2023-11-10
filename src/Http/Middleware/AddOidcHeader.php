@@ -19,8 +19,8 @@ class AddOidcHeader
         $response = $next($request);
         $user = auth()->user();
         if ($user) {
-            $response->headers->set('REMOTE_USER', $user->netid);
-            $_SERVER['REMOTE_USER'] = $user->netid;
+            $response->headers->set('X-Username', $user->email);
+            $_SERVER['X-Username'] = $user->email;
         }
         return $response;
     }
