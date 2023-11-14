@@ -12,10 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('netid')->after('id')->unique();
-            $table->string('first_name')->after('name');
-            $table->string('last_name')->after('first_name');
-            $table->string('uin', 9)->unique()->after('last_name');
+            if(!Schema::hasColumn('users', 'netid')) {
+                $table->string('netid')->after('id')->unique();
+            }
+
+            if(!Schema::hasColumn('users', 'first_name')) {
+                $table->string('first_name')->after('name');
+            }
+            if(!Schema::hasColumn('users', 'last_name')) {
+                $table->string('last_name')->after('first_name');
+            }
+            if(!Schema::hasColumn('users', 'uin')) {
+                $table->string('uin', 9)->after('netid')->unique();
+            }
+
             $table->longText('access_token')->nullable()->after('password');
             $table->longText('id_token')->nullable()->after('access_token');
             $table->longText('refresh_token')->nullable()->after('id_token');
