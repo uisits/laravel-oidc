@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             if(!Schema::hasColumn('users', 'netid')) {
-                $table->string('netid')->after('id')->unique();
+                $table->string('netid')->after('id');
             }
 
             if(!Schema::hasColumn('users', 'first_name')) {
