@@ -185,8 +185,6 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
 
     /**
      * Map Api response data to a User Object.
-     * @param array $user
-     * @return User
      */
     protected function mapUserToObject(array $user): User
     {
@@ -198,7 +196,7 @@ final class ShibbolethOidcProvider extends AbstractProvider implements ProviderI
             'name' => $user['given_name'].' '.$user['family_name'],
             'email' => $user['email'],
             'password' => Hash::make($user['uisedu_uin'].now()),
-            'groups' =>  array_key_exists('uisedu_is_member_of', $user) ? $user['uisedu_is_member_of']: []
+            'groups' => array_key_exists('uisedu_is_member_of', $user) ? $user['uisedu_is_member_of'] : [],
         ]);
     }
 

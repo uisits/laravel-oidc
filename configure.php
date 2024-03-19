@@ -58,11 +58,10 @@ if (! confirm('Modify files?', true)) {
     exit(1);
 }
 
-$file = app_path() . "/Http/Kernel.php";
+$file = app_path().'/Http/Kernel.php';
 replace_in_file($file, [
-    '\App\Http\Middleware\CheckSession::class,' => ""
+    '\App\Http\Middleware\CheckSession::class,' => '',
 ]);
-
 
 confirm('Execute `composer install` and run tests?') && run('composer install && composer test');
 

@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if(!Schema::hasColumn('users', 'netid')) {
+            if (! Schema::hasColumn('users', 'netid')) {
                 $table->string('netid')->after('id');
             }
 
-            if(!Schema::hasColumn('users', 'first_name')) {
+            if (! Schema::hasColumn('users', 'first_name')) {
                 $table->string('first_name')->after('name');
             }
-            if(!Schema::hasColumn('users', 'last_name')) {
+            if (! Schema::hasColumn('users', 'last_name')) {
                 $table->string('last_name')->after('first_name');
             }
-            if(!Schema::hasColumn('users', 'uin')) {
+            if (! Schema::hasColumn('users', 'uin')) {
                 $table->string('uin', 9)->after('netid')->unique();
             }
 

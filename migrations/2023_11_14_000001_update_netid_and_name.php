@@ -29,17 +29,11 @@ return new class extends Migration
         });
     }
 
-    /**
-     * @return bool
-     */
     protected function updateNetid(): bool
     {
         return DB::connection()->statement('UPDATE `users` SET `netid` = `name`');
     }
 
-    /**
-     * @return bool
-     */
     protected function updateName(): bool
     {
         return DB::connection()->statement('UPDATE `users` SET `name` = CONCAT(`first_name`, " ", `last_name`)');
