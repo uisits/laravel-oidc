@@ -11,7 +11,9 @@ use UisIts\Oidc\Contracts\Factory;
 use UisIts\Oidc\Exceptions\DriverMissingConfigurationException;
 use UisIts\Oidc\Providers\AbstractOidcProvider;
 use UisIts\Oidc\Providers\TriCampusOidcProvider;
-use UisIts\Oidc\Providers\UisOidcProvider;
+use UisIts\Oidc\Providers\UicProvider;
+use UisIts\Oidc\Providers\UisProvider;
+use UisIts\Oidc\Providers\UiucProvider;
 
 class ShibbolethManager extends Manager implements Factory
 {
@@ -132,22 +134,32 @@ class ShibbolethManager extends Manager implements Factory
     }
 
     /**
-     * Create a shibboleth oidc driver
+     * Create a driver for UIS campus.
      */
-    public function createUisOidcDriver(): AbstractOidcProvider
+    public function createUisDriver(): AbstractOidcProvider
     {
         $config = $this->config->get('shibboleth-oidc.providers.uis');
 
-        return $this->buildProvider(UisOidcProvider::class, $config);
+        return $this->buildProvider(UisProvider::class, $config);
     }
 
     /**
-     * Create a shibboleth oidc driver
+     * Create a driver for UIC campus.
      */
-    public function createTriCampusDriver(): AbstractOidcProvider
+    public function createUicDriver(): AbstractOidcProvider
     {
-        $config = $this->config->get('shibboleth-oidc.providers.uis');
+        $config = $this->config->get('shibboleth-oidc.providers.uic');
 
-        return $this->buildProvider(TriCampusOidcProvider::class, $config);
+        return $this->buildProvider(UicProvider::class, $config);
+    }
+
+    /**
+     * Create a driver for UIUC campus.
+     */
+    public function createUiucDriver(): AbstractOidcProvider
+    {
+        $config = $this->config->get('shibboleth-oidc.providers.uiuc');
+
+        return $this->buildProvider(UiucProvider::class, $config);
     }
 }

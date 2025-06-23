@@ -9,9 +9,9 @@ class LoginAction
     public function __invoke()
     {
         if(config('shibboleth-oidc.tri-campus-provider')) {
-            Oidc::driver('tri-campus')->redirect();
+            return view('laravel-oidc::tri-campus');
         }
 
-        return Oidc::driver('uis-oidc')->redirect();
+        return Oidc::driver('uis')->redirect();
     }
 }

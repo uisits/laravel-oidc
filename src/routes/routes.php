@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use UisIts\Oidc\Actions\CallbackHandleAction;
 use UisIts\Oidc\Actions\LoginAction;
 use UisIts\Oidc\Actions\LogoutAction;
-use UisIts\Oidc\Http\Controllers\TriCampusDiscoveryController;
+use UisIts\Oidc\Actions\TriCampusHandler;
 
 Route::middleware(['web'])->group(function () {
     // UIS setup
@@ -19,8 +19,8 @@ Route::middleware(['web'])->group(function () {
 
     // TriCampus setup
     Route::name('tri-campus-discovery.show')
-        ->get('/tri-campus-discovery', [TriCampusDiscoveryController::class, 'show']);
+        ->get('/tri-campus-discovery', [TriCampusHandler::class, 'show']);
 
     Route::name('tri-campus-discovery.update')
-        ->post('/tri-campus-discovery', [TriCampusDiscoveryController::class, 'update']);
+        ->post('/tri-campus-discovery', [TriCampusHandler::class, 'update']);
 });

@@ -15,7 +15,7 @@ use UisIts\Oidc\Exceptions\InvalidStateException;
 use UisIts\Oidc\Exceptions\ValueNotFoundException;
 use UisIts\Oidc\User;
 
-class UisOidcProvider extends AbstractOidcProvider
+class UiucProvider extends AbstractOidcProvider
 {
     /**
      * The separating character for the requested scopes.
@@ -32,10 +32,7 @@ class UisOidcProvider extends AbstractOidcProvider
     protected array $scopes = [
         'openid',
         'profile',
-        'email',
-        'phone',
-        'address',
-        'offline_access',
+        'email'
     ];
 
     /**
@@ -58,11 +55,11 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     public function getScopes(): array
     {
-        if (empty(config('shibboleth-oidc.providers.uis.scopes'))) {
-            throw new ValueNotFoundException('Scopes not set in config file');
+        if (empty(config('shibboleth-oidc.providers.uiuc.scopes'))) {
+            throw new ValueNotFoundException('UIUC scopes not set in config file');
         }
 
-        return array_unique((array)config('shibboleth-oidc.providers.uis.scopes'));
+        return array_unique((array)config('shibboleth-oidc.providers.uiuc.scopes'));
     }
 
     /**
@@ -71,12 +68,12 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     protected function getAuthUrl($state): string
     {
-        if (empty(config('shibboleth-oidc.providers.uis.auth_url'))) {
-            throw new ValueNotFoundException('Auth url not set in config');
+        if (empty(config('shibboleth-oidc.providers.uiuc.auth_url'))) {
+            throw new ValueNotFoundException('UIUC auth url not set in config');
         }
 
         return $this->buildAuthUrlFromBase(
-            config('shibboleth-oidc.providers.uis.auth_url'),
+            config('shibboleth-oidc.providers.uiuc.auth_url'),
             $state
         );
     }
@@ -103,11 +100,11 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     protected function getTokenUrl(): string
     {
-        if (empty(config('shibboleth-oidc.providers.uis.token_url'))) {
-            throw new ValueNotFoundException('UIS token url not set in config');
+        if (empty(config('shibboleth-oidc.providers.uiuc.token_url'))) {
+            throw new ValueNotFoundException('UIUC token url not set in config');
         }
 
-        return config('shibboleth-oidc.providers.uis.token_url');
+        return config('shibboleth-oidc.providers.uiuc.token_url');
     }
 
     /**
@@ -118,11 +115,11 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     protected function getUserUrl(): ?string
     {
-        if (empty(config('shibboleth-oidc.providers.uis.user_url'))) {
-            throw new ValueNotFoundException('UIS User profile url not set in config');
+        if (empty(config('shibboleth-oidc.providers.uiuc.user_url'))) {
+            throw new ValueNotFoundException('UIUC User profile url not set in config');
         }
 
-        return config('shibboleth-oidc.providers.uis.user_url');
+        return config('shibboleth-oidc.providers.uiuc.user_url');
     }
 
     /**
@@ -131,11 +128,11 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     protected function getIntrospectUrl(): string
     {
-        if (empty(config('shibboleth-oidc.providers.uis.introspect_url'))) {
-            throw new ValueNotFoundException('Introspect url not set in config');
+        if (empty(config('shibboleth-oidc.providers.uiuc.introspect_url'))) {
+            throw new ValueNotFoundException('UIUC Introspect url not set in config');
         }
 
-        return config('shibboleth-oidc.providers.uis.introspect_url');
+        return config('shibboleth-oidc.providers.uiuc.introspect_url');
     }
 
     /**
@@ -196,15 +193,16 @@ class UisOidcProvider extends AbstractOidcProvider
 
     protected function mapUserToObject(array $user): User
     {
+        dd($user);
         return (new User)->setRaw($user)->map([
-            'uin' => $user[config('shibboleth-oidc.providers.uis.user-mapping.uin')],
-            'netid' => $user[config('shibboleth-oidc.providers.uis.user-mapping.netid')],
-            'firstName' => $user[config('shibboleth-oidc.providers.uis.user-mapping.first_name')],
-            'lastName' => $user[config('shibboleth-oidc.providers.uis.user-mapping.last_name')],
+            'uin' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')],
+            'netid' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.netid')],
+            'firstName' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.first_name')],
+            'lastName' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.last_name')],
             'name' => $user['given_name'] . ' ' . $user['family_name'],
-            'email' => $user[config('shibboleth-oidc.providers.uis.user-mapping.email')],
-            'password' => Hash::make($user[config('shibboleth-oidc.providers.uis.user-mapping.uin')] . now()),
-            'groups' => $user['uisedu_is_member_of'],
+            'email' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.email')],
+            'password' => Hash::make($user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')] . now()),
+            'groups' => $user['uicedu_is_member_of'],
         ]);
     }
 
@@ -218,10 +216,10 @@ class UisOidcProvider extends AbstractOidcProvider
      */
     public function introspect($token): mixed
     {
-        $clientId = config('shibboleth-oidc.uis-provider.introspect.client_id');
-        $clientSecret = config('shibboleth-oidc.uis-provider.introspect.client_secret');
+        $clientId = config('shibboleth-oidc.providers.uiuc.introspect.client_id');
+        $clientSecret = config('shibboleth-oidc.providers.uiuc.introspect.client_secret');
 
-        throw_if(empty($clientId) || empty($clientSecret), new ValueNotFoundException('UIS Introspect Client ID or Secret not set!'));
+        throw_if(empty($clientId) || empty($clientSecret), new ValueNotFoundException('UIUC Introspect Client ID or Secret not set!'));
 
         $response = $this->getHttpClient()->post(
             $this->getIntrospectUrl(), [
@@ -244,7 +242,7 @@ class UisOidcProvider extends AbstractOidcProvider
     {
         $user = Auth::user();
         throw_if(!$user, AuthenticationException::class);
-        $logout_url = config('shibboleth-oidc.providers.uis.logout_url');
+        $logout_url = config('shibboleth-oidc.providers.uiuc.logout_url');
         $response = $this->getHttpClient()->get($logout_url, [
             RequestOptions::HEADERS => ['Authorization' => 'Bearer ' . $user->access_token],
         ]);
@@ -253,7 +251,7 @@ class UisOidcProvider extends AbstractOidcProvider
             Auth::logout();
             Session::flush();
 
-            return new RedirectResponse(config('shibboleth-oidc.providers.uis.logout_url'));
+            return new RedirectResponse(config('shibboleth-oidc.providers.uiuc.logout_url'));
         }
 
         throw new InvalidLogoutException('User logout failed!');

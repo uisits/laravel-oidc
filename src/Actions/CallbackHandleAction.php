@@ -3,14 +3,13 @@
 namespace UisIts\Oidc\Actions;
 
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
 use UisIts\Oidc\Facades\Oidc;
 
 class CallbackHandleAction
 {
     public function __invoke()
     {
-        $user = Oidc::driver('uis-oidc')->user();
+        $user = Oidc::driver('uis')->user();
 
         $userClass = config('auth.providers.users.model');
 
