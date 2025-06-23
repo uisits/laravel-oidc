@@ -5,7 +5,6 @@ namespace UisIts\Oidc\Providers;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -21,57 +20,41 @@ abstract class AbstractOidcProvider implements ProviderContract
 {
     /**
      * The HTTP request instance.
-     *
-     * @var Request
      */
     protected Request $request;
 
     /**
      * The HTTP Client instance.
-     *
-     * @var Client|null
      */
     protected ?Client $httpClient = null;
 
     /**
      * The client ID.
-     *
-     * @var string
      */
     protected string $clientId;
 
     /**
      * The client secret.
-     *
-     * @var string
      */
     protected string $clientSecret;
 
     /**
      * The redirect URL.
-     *
-     * @var string
      */
     protected string $redirectUrl;
 
     /**
      * The custom parameters to be sent with the request.
-     *
-     * @var array
      */
     protected array $parameters = [];
 
     /**
      * The scopes being requested.
-     *
-     * @var array
      */
     protected array $scopes = [];
 
     /**
      * The separating character for the requested scopes.
-     *
-     * @var string
      */
     protected string $scopeSeparator = ',';
 
@@ -84,55 +67,38 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Indicates if the session state should be used.
-     *
-     * @var bool
      */
     protected bool $stateless = false;
 
     /**
      * Indicates if PKCE should be used.
-     *
-     * @var bool
      */
     protected bool $usesPKCE = false;
 
     /**
      * The custom Guzzle configuration options.
-     *
-     * @var array
      */
     protected array $guzzle = [];
 
     /**
      * The cached user instance.
-     *
-     * @var User|null
      */
     protected ?User $user;
 
-    /**
-     * @var Collection|null
-     */
     protected ?Collection $openIdConfig = null;
 
     /**
      * Create a new provider instance.
      *
-     * @param Request $request
-     * @param string $clientId
-     * @param string $clientSecret
-     * @param string $redirectUrl
-     * @param array $guzzle
      * @return void
      */
     public function __construct(
         Request $request,
-        string  $clientId,
-        string  $clientSecret,
-        string  $redirectUrl,
-        array   $guzzle = []
-    )
-    {
+        string $clientId,
+        string $clientSecret,
+        string $redirectUrl,
+        array $guzzle = []
+    ) {
         $this->guzzle = $guzzle;
         $this->request = $request;
         $this->clientId = $clientId;
@@ -143,39 +109,26 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the authentication URL for the provider.
-     *
-     * @param string $state
-     * @return string
      */
     abstract protected function getAuthUrl(string $state): string;
 
     /**
      * Get the token URL for the provider.
-     *
-     * @return string
      */
     abstract protected function getTokenUrl(): string;
 
     /**
      * Get the raw user for the given access token.
-     *
-     * @param string $token
-     * @return array
      */
     abstract protected function getUserByToken(string $token): array;
 
     /**
      * Map the raw user array to a User instance.
-     *
-     * @param array $user
-     * @return User
      */
     abstract protected function mapUserToObject(array $user): User;
 
     /**
      * Redirect the user of the application to the provider's authentication screen.
-     *
-     * @return RedirectResponse
      */
     public function redirect(): RedirectResponse
     {
@@ -194,21 +147,14 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Build the authentication URL for the provider from the given base URL.
-     *
-     * @param string $url
-     * @param string $state
-     * @return string
      */
     protected function buildAuthUrlFromBase(string $url, string $state): string
     {
-        return $url . '?' . http_build_query($this->getCodeFields($state), '', '&', $this->encodingType);
+        return $url.'?'.http_build_query($this->getCodeFields($state), '', '&', $this->encodingType);
     }
 
     /**
      * Get the GET parameters for the code request.
-     *
-     * @param string|null $state
-     * @return array
      */
     protected function getCodeFields(?string $state = null): array
     {
@@ -233,10 +179,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Format the given scopes.
-     *
-     * @param array $scopes
-     * @param string $scopeSeparator
-     * @return string
      */
     protected function formatScopes(array $scopes, string $scopeSeparator): string
     {
@@ -246,7 +188,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Get the user from the provider.
      *
-     * @return User
      * @throws InvalidStateException|GuzzleException
      */
     public function user(): User
@@ -268,10 +209,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Create a user instance from the given data.
-     *
-     * @param array $response
-     * @param array $user
-     * @return User
      */
     protected function userInstance(array $response, array $user): User
     {
@@ -285,9 +222,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get a User instance from a known access token.
-     *
-     * @param string $token
-     * @return User
      */
     public function userFromToken(string $token): User
     {
@@ -298,8 +232,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Determine if the current request / session has a mismatching "state".
-     *
-     * @return bool
      */
     protected function hasInvalidState(): bool
     {
@@ -315,8 +247,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Get the access token response for the given code.
      *
-     * @param string $code
-     * @return array
      * @throws GuzzleException
      */
     public function getAccessTokenResponse(string $code): array
@@ -331,9 +261,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the headers for the access token request.
-     *
-     * @param string $code
-     * @return array
      */
     protected function getTokenHeaders(string $code): array
     {
@@ -342,9 +269,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the POST fields for the token request.
-     *
-     * @param string $code
-     * @return array
      */
     protected function getTokenFields(string $code): array
     {
@@ -365,9 +289,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Refresh a user's access token with a refresh token.
-     *
-     * @param string $refreshToken
-     * @return Token
      */
     public function refreshToken(string $refreshToken): Token
     {
@@ -383,9 +304,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the refresh token response for the given refresh token.
-     *
-     * @param string $refreshToken
-     * @return array
      */
     protected function getRefreshTokenResponse(string $refreshToken): array
     {
@@ -402,8 +320,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the code from the request.
-     *
-     * @return string
      */
     protected function getCode(): string
     {
@@ -413,12 +329,11 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Merge the scopes of the requested access.
      *
-     * @param array|string $scopes
      * @return $this
      */
     public function scopes(array|string $scopes): static
     {
-        $this->scopes = array_values(array_unique(array_merge($this->scopes, (array)$scopes)));
+        $this->scopes = array_values(array_unique(array_merge($this->scopes, (array) $scopes)));
 
         return $this;
     }
@@ -426,20 +341,17 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Set the scopes of the requested access.
      *
-     * @param array|string $scopes
      * @return $this
      */
     public function setScopes(array|string $scopes): static
     {
-        $this->scopes = array_values(array_unique((array)$scopes));
+        $this->scopes = array_values(array_unique((array) $scopes));
 
         return $this;
     }
 
     /**
      * Get the current scopes.
-     *
-     * @return array
      */
     public function getScopes(): array
     {
@@ -449,7 +361,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Set the redirect URL.
      *
-     * @param string $url
      * @return $this
      */
     public function redirectUrl(string $url): static
@@ -461,8 +372,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get an instance of the Guzzle HTTP client.
-     *
-     * @return Client
      */
     protected function getHttpClient(): Client
     {
@@ -476,7 +385,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Set the Guzzle HTTP client instance.
      *
-     * @param Client $client
      * @return $this
      */
     public function setHttpClient(Client $client): static
@@ -489,7 +397,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Set the request instance.
      *
-     * @param Request $request
      * @return $this
      */
     public function setRequest(Request $request): static
@@ -501,18 +408,14 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Determine if the provider is operating with a state.
-     *
-     * @return bool
      */
     protected function usesState(): bool
     {
-        return !$this->stateless;
+        return ! $this->stateless;
     }
 
     /**
      * Determine if the provider is operating as stateless.
-     *
-     * @return bool
      */
     protected function isStateless(): bool
     {
@@ -533,8 +436,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Get the string used for session state.
-     *
-     * @return string
      */
     protected function getState(): string
     {
@@ -543,8 +444,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Determine if the provider uses PKCE.
-     *
-     * @return bool
      */
     protected function usesPKCE(): bool
     {
@@ -565,8 +464,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Generates a random string of the right length for the PKCE code verifier.
-     *
-     * @return string
      */
     protected function getCodeVerifier(): string
     {
@@ -575,8 +472,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Generates the PKCE code challenge based on the PKCE code verifier in the session.
-     *
-     * @return string
      */
     protected function getCodeChallenge(): string
     {
@@ -587,8 +482,6 @@ abstract class AbstractOidcProvider implements ProviderContract
 
     /**
      * Returns the hash method used to calculate the PKCE code challenge.
-     *
-     * @return string
      */
     protected function getCodeChallengeMethod(): string
     {
@@ -598,7 +491,6 @@ abstract class AbstractOidcProvider implements ProviderContract
     /**
      * Set the custom parameters of the request.
      *
-     * @param array $parameters
      * @return $this
      */
     public function with(array $parameters)

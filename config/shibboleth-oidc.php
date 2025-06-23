@@ -29,7 +29,7 @@ return [
                 'client_id' => env('UIS_INTROSPECT_CLIENT_ID', null),
                 'client_secret' => env('UIS_INTROSPECT_CLIENT_SECRET', null),
             ],
-            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access']
+            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access'],
         ],
         'uic' => [
             'config_url' => env('UIC_OIDC_CONFIG_URL'),
@@ -53,7 +53,7 @@ return [
                 'client_id' => env('UIC_INTROSPECT_CLIENT_ID', null),
                 'client_secret' => env('UIC_INTROSPECT_CLIENT_SECRET', null),
             ],
-            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access']
+            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access'],
         ],
         'uiuc' => [
             'config_url' => env('UIUC_OIDC_CONFIG_URL'),
@@ -77,7 +77,7 @@ return [
                 'client_id' => env('UIUC_INTROSPECT_CLIENT_ID', null),
                 'client_secret' => env('UIUC_INTROSPECT_CLIENT_SECRET', null),
             ],
-            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access']
+            'scopes' => ['openid', 'profile', 'email', 'address', 'phone', 'offline_access'],
         ],
     ],
 

@@ -19,38 +19,28 @@ class UiucProvider extends AbstractOidcProvider
 {
     /**
      * The separating character for the requested scopes.
-     *
-     * @var string
      */
     protected string $scopeSeparator = ' ';
 
     /**
      * The scopes being requested.
-     *
-     * @var array
      */
     protected array $scopes = [
         'openid',
         'profile',
-        'email'
+        'email',
     ];
 
-    /**
-     * @var bool
-     */
     protected bool $usesPKCE = true;
 
     /**
      * The cached user instance.
-     *
-     * @var User|null
      */
     protected ?User $user = null;
 
     /**
      * Set the scopes
      *
-     * @return array
      * @throws ValueNotFoundException
      */
     public function getScopes(): array
@@ -59,11 +49,12 @@ class UiucProvider extends AbstractOidcProvider
             throw new ValueNotFoundException('UIUC scopes not set in config file');
         }
 
-        return array_unique((array)config('shibboleth-oidc.providers.uiuc.scopes'));
+        return array_unique((array) config('shibboleth-oidc.providers.uiuc.scopes'));
     }
 
     /**
      * Returns the auth url for authentication provider.
+     *
      * @throws ValueNotFoundException
      */
     protected function getAuthUrl($state): string
@@ -79,9 +70,6 @@ class UiucProvider extends AbstractOidcProvider
     }
 
     /**
-     * @param $code
-     * @return array
-     *
      * @throws ValueNotFoundException
      */
     public function getAccessTokenResponse($code): array
@@ -96,6 +84,7 @@ class UiucProvider extends AbstractOidcProvider
 
     /**
      * {@inheritdoc}
+     *
      * @throws ValueNotFoundException
      */
     protected function getTokenUrl(): string
@@ -110,7 +99,6 @@ class UiucProvider extends AbstractOidcProvider
     /**
      * Get the url to retrieve user by token
      *
-     * @return string|null
      * @throws ValueNotFoundException
      */
     protected function getUserUrl(): ?string
@@ -124,6 +112,7 @@ class UiucProvider extends AbstractOidcProvider
 
     /**
      * Get the url to introspect user token
+     *
      * @throws ValueNotFoundException
      */
     protected function getIntrospectUrl(): string
@@ -137,12 +126,13 @@ class UiucProvider extends AbstractOidcProvider
 
     /**
      * {@inheritdoc}
+     *
      * @throws ValueNotFoundException|GuzzleException
      */
     public function getUserByToken($token): array
     {
         $response = $this->getHttpClient()->get($this->getUserUrl(), [
-            RequestOptions::HEADERS => ['Authorization' => 'Bearer ' . $token],
+            RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$token],
         ]);
 
         return json_decode($response->getBody(), true);
@@ -194,14 +184,15 @@ class UiucProvider extends AbstractOidcProvider
     protected function mapUserToObject(array $user): User
     {
         dd($user);
+
         return (new User)->setRaw($user)->map([
             'uin' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')],
             'netid' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.netid')],
             'firstName' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.first_name')],
             'lastName' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.last_name')],
-            'name' => $user['given_name'] . ' ' . $user['family_name'],
+            'name' => $user['given_name'].' '.$user['family_name'],
             'email' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.email')],
-            'password' => Hash::make($user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')] . now()),
+            'password' => Hash::make($user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')].now()),
             'groups' => $user['uicedu_is_member_of'],
         ]);
     }
@@ -223,12 +214,12 @@ class UiucProvider extends AbstractOidcProvider
 
         $response = $this->getHttpClient()->post(
             $this->getIntrospectUrl(), [
-            RequestOptions::FORM_PARAMS => [
-                'token' => $token,
-                'client_id' => $clientId,
-                'client_secret' => $clientSecret,
-            ],
-        ]);
+                RequestOptions::FORM_PARAMS => [
+                    'token' => $token,
+                    'client_id' => $clientId,
+                    'client_secret' => $clientSecret,
+                ],
+            ]);
 
         return json_decode($response->getBody(), true);
     }
@@ -241,10 +232,10 @@ class UiucProvider extends AbstractOidcProvider
     public function logout(): RedirectResponse
     {
         $user = Auth::user();
-        throw_if(!$user, AuthenticationException::class);
+        throw_if(! $user, AuthenticationException::class);
         $logout_url = config('shibboleth-oidc.providers.uiuc.logout_url');
         $response = $this->getHttpClient()->get($logout_url, [
-            RequestOptions::HEADERS => ['Authorization' => 'Bearer ' . $user->access_token],
+            RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$user->access_token],
         ]);
 
         if ($response->getStatusCode() === 200) {

@@ -2,11 +2,9 @@
 
 namespace UisIts\Oidc;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use UisIts\Oidc\Console\ShibbolethInstall;
 use UisIts\Oidc\Contracts\Factory;
-use UisIts\Oidc\Oidc\ShibbolethOidcProvider;
 
 class ShibbolethServiceProvider extends ServiceProvider
 {

@@ -3,13 +3,24 @@
 namespace UisIts\Oidc\Actions;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use UisIts\Oidc\Enums\Campus;
 use UisIts\Oidc\Facades\Oidc;
 
 class CallbackHandleAction
 {
     public function __invoke()
     {
-        $user = Oidc::driver('uis')->user();
+        if (empty(Session::get('oidc.campus'))) {
+            throw new \InvalidArgumentException('Campus not set');
+        }
+
+        $user = match (Session::get('oidc.campus')) {
+            Campus::UIS->value => Oidc::driver('uis')->user(),
+            Campus::UIC->value => Oidc::driver('uic')->user(),
+            Campus::UIUC->value => Oidc::driver('uiuc')->user(),
+            default => throw new \InvalidArgumentException('Campus not set!'),
+        };
 
         $userClass = config('auth.providers.users.model');
 
@@ -39,6 +50,6 @@ class CallbackHandleAction
     protected function getRedirectUrl(): string
     {
         return empty(config('shibboleth-oidc.redirect_to')) ?
-            '/': config('shibboleth-oidc.providers.uis.redirect');
+            '/' : config('shibboleth-oidc.providers.uis.redirect');
     }
 }

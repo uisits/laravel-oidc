@@ -21,17 +21,23 @@
                 <h2>Choose from the following:</h2>
             </legend>
             <p>
-                <input type="radio" name="campus" value="uic" required>University
-                of Illinois Chicago</input>
-            </p>
-            <p>
-                <input type="radio" name="campus" value="uis">University
-                of Illinois Springfield</input>
-            </p>
-            <p>
                 <input type="radio" name="campus"
-                       value="uiuc">University of Illinois
-                Urbana-Champaign</input>
+                       value="{{ \UisIts\Oidc\Enums\Campus::UIC->value }}" required
+                >
+                University of Illinois Chicago
+                </input>
+            </p>
+            <p>
+                <input type="radio" name="campus" value="{{ \UisIts\Oidc\Enums\Campus::UIS->value }}"
+                >
+                    University of Illinois Springfield
+                </input>
+            </p>
+            <p>
+                <input type="radio" name="campus" value="{{ \UisIts\Oidc\Enums\Campus::UIUC->value }}"
+                >
+                    University of Illinois Urbana-Champaign
+                </input>
             </p>
             <p>
                 <button type="submit">Submit</button>

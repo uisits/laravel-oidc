@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use UisIts\Oidc\Contracts\Factory;
 use UisIts\Oidc\Exceptions\DriverMissingConfigurationException;
 use UisIts\Oidc\Providers\AbstractOidcProvider;
-use UisIts\Oidc\Providers\TriCampusOidcProvider;
 use UisIts\Oidc\Providers\UicProvider;
 use UisIts\Oidc\Providers\UisProvider;
 use UisIts\Oidc\Providers\UiucProvider;
@@ -29,7 +28,6 @@ class ShibbolethManager extends Manager implements Factory
     /**
      * Get a driver instance.
      *
-     * @param string $driver
      * @return mixed
      */
     public function with(string $driver)
@@ -40,9 +38,10 @@ class ShibbolethManager extends Manager implements Factory
     /**
      * Build an OAuth 2 provider instance.
      *
-     * @param string $provider
-     * @param array $config
+     * @param  string  $provider
+     * @param  array  $config
      * @return AbstractOidcProvider
+     *
      * @throws BindingResolutionException
      */
     public function buildProvider($provider, $config)
@@ -51,7 +50,7 @@ class ShibbolethManager extends Manager implements Factory
 
         $missingKeys = array_diff($requiredKeys, array_keys($config ?? []));
 
-        if (!empty($missingKeys)) {
+        if (! empty($missingKeys)) {
             throw DriverMissingConfigurationException::make($provider, $missingKeys);
         }
 
@@ -66,9 +65,6 @@ class ShibbolethManager extends Manager implements Factory
 
     /**
      * Format the server configuration.
-     *
-     * @param array $config
-     * @return array
      */
     public function formatConfig(array $config): array
     {
@@ -81,9 +77,6 @@ class ShibbolethManager extends Manager implements Factory
 
     /**
      * Format the callback URL, resolving a relative URI if needed.
-     *
-     * @param array $config
-     * @return string
      */
     protected function formatRedirectUrl(array $config): string
     {
@@ -109,7 +102,7 @@ class ShibbolethManager extends Manager implements Factory
     /**
      * Set the container instance used by the manager.
      *
-     * @param \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return $this
      */
     public function setContainer($container)
@@ -124,7 +117,6 @@ class ShibbolethManager extends Manager implements Factory
     /**
      * Get the default driver name.
      *
-     * @return string
      *
      * @throws InvalidArgumentException
      */

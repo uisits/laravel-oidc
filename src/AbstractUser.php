@@ -119,7 +119,6 @@ abstract class AbstractUser implements ArrayAccess, User
     /**
      * Set the raw user array from the provider.
      *
-     * @param  array  $user
      * @return $this
      */
     public function setRaw(array $user)
@@ -132,7 +131,6 @@ abstract class AbstractUser implements ArrayAccess, User
     /**
      * Map the given array onto the user's properties.
      *
-     * @param  array  $attributes
      * @return $this
      */
     public function map(array $attributes)

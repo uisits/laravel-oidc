@@ -3,7 +3,8 @@
 namespace UisIts\Oidc\Actions;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Session;
+use UisIts\Oidc\Enums\Campus;
 use UisIts\Oidc\Exceptions\InvalidaCampusSelectionException;
 use UisIts\Oidc\Facades\Oidc;
 
@@ -15,22 +16,36 @@ class TriCampusHandler
     }
 
     /**
-     * @param Request $request
      * @return void
+     *
      * @throws InvalidaCampusSelectionException
      */
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'campus' => 'string|required|in:uic,uiuc,uis'
+            'campus' => 'string|required|in:uic,uiuc,uis',
         ]);
-        return match($validated['campus']) {
-            'uic' => Oidc::driver('uic')->redirect(),
-            'uiuc' => Oidc::driver('uiuc')->redirect(),
-            'uis' => Oidc::driver('uis')->redirect(),
-            default => throw new InvalidaCampusSelectionException(
-                'Invalid Campus Selection'
-            )
-        };
+
+        if ($validated['campus'] === Campus::UIS->value) {
+            Session::put('oidc.campus', $validated['campus']);
+
+            return Oidc::driver('uis')->redirect();
+        }
+
+        if ($validated['campus'] === Campus::UIC->value) {
+            Session::put('oidc.campus', $validated['campus']);
+
+            return Oidc::driver('uic')->redirect();
+        }
+
+        if ($validated['campus'] === Campus::UIUC->value) {
+            Session::put('oidc.campus', $validated['campus']);
+
+            return Oidc::driver('uiuc')->redirect();
+        }
+
+        throw new InvalidaCampusSelectionException(
+            'Invalid Campus Selection'
+        );
     }
 }

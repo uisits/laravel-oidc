@@ -34,11 +34,6 @@ class Token
 
     /**
      * Create a new token instance.
-     *
-     * @param  string  $token
-     * @param  string  $refreshToken
-     * @param  int  $expiresIn
-     * @param  array  $approvedScopes
      */
     public function __construct(string $token, string $refreshToken, int $expiresIn, array $approvedScopes)
     {

@@ -9,9 +9,7 @@ class DriverMissingConfigurationException extends InvalidArgumentException
     /**
      * Create a new exception for a missing configuration.
      *
-     * @param string $provider
-     * @param array<int, string> $keys
-     * @return static
+     * @param  array<int, string>  $keys
      */
     public static function make(string $provider, array $keys): static
     {

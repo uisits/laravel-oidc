@@ -2,8 +2,6 @@
 
 namespace UisIts\Oidc\Contracts;
 
-use Illuminate\Support\Collection;
-
 interface Provider
 {
     /**
@@ -15,8 +13,6 @@ interface Provider
 
     /**
      * Get the User instance for the authenticated user.
-     *
-     * @return \UisIts\Oidc\User
      */
     public function user(): \UisIts\Oidc\User;
 }
