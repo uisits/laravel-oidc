@@ -2,27 +2,34 @@
 
 namespace UisIts\Oidc;
 
-use Laravel\Socialite\SocialiteServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ServiceProvider;
 use UisIts\Oidc\Console\ShibbolethInstall;
+use UisIts\Oidc\Contracts\Factory;
+use UisIts\Oidc\Oidc\ShibbolethOidcProvider;
 
-class ShibbolethServiceProvider extends SocialiteServiceProvider
+class ShibbolethServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__.'/../config/shibboleth.php' => config_path('shibboleth.php'),
-        ], 'shib-config');
+        $this->mergeConfigFrom(__DIR__.'/../config/shibboleth-oidc.php', 'shibboleth-oidc');
 
-        $this->loadRoutes();
+        $this->loadRoutesFrom(realpath(__DIR__.'/routes/routes.php'));
 
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
 
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'courier');
+
         $this->publishes([
             __DIR__.'/../migrations' => database_path('migrations'),
-        ], 'shib-migrations');
+        ], 'shibboleth-migrations');
+
+        $this->publishes([
+            __DIR__.'/../config/shibboleth-oidc.php' => config_path('shibboleth-oidc.php'),
+        ], 'shibboleth-config');
     }
 
     /**
@@ -30,21 +37,13 @@ class ShibbolethServiceProvider extends SocialiteServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('Laravel\Socialite\Contracts\Factory', function ($app) {
-            return new ShibbolethSocialiteManager($app);
+        $this->app->singleton(Factory::class, function ($app) {
+            return new ShibbolethManager($app);
         });
 
         // Register the shibboleth:install command
         if ($this->app->runningInConsole()) {
             $this->commands(ShibbolethInstall::class);
         }
-    }
-
-    /**
-     * Register routes required for authentication and introspection
-     */
-    protected function loadRoutes(): void
-    {
-        $this->loadRoutesFrom(realpath(__DIR__.'/routes/routes.php'));
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-namespace UisIts\Oidc\Oidc;
-
-use Laravel\Socialite\AbstractUser;
+namespace UisIts\Oidc;
 
 class User extends AbstractUser
 {
@@ -39,12 +37,23 @@ class User extends AbstractUser
      */
     public $approvedScopes;
 
+    public $email;
+
+    public $netid;
+
+    public $firstName;
+
+    public $lastName;
+
+    public $uin;
+
     /**
      * Set the token on the user.
      *
+     * @param  string  $token
      * @return $this
      */
-    public function setToken(string $token): static
+    public function setToken($token)
     {
         $this->token = $token;
 
@@ -66,9 +75,10 @@ class User extends AbstractUser
     /**
      * Set the refresh token required to obtain a new access token.
      *
+     * @param  string  $refreshToken
      * @return $this
      */
-    public function setRefreshToken(string $refreshToken): static
+    public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
 
@@ -81,7 +91,7 @@ class User extends AbstractUser
      * @param  int  $expiresIn
      * @return $this
      */
-    public function setExpiresIn($expiresIn): static
+    public function setExpiresIn($expiresIn)
     {
         $this->expiresIn = $expiresIn;
 
@@ -91,9 +101,10 @@ class User extends AbstractUser
     /**
      * Set the scopes that were approved by the user during authentication.
      *
+     * @param  array  $approvedScopes
      * @return $this
      */
-    public function setApprovedScopes(array $approvedScopes): static
+    public function setApprovedScopes($approvedScopes)
     {
         $this->approvedScopes = $approvedScopes;
 
