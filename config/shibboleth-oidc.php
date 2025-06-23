@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tri-campus-provider' => false,
+    'tri-campus-provider' => true,
 
     /*
      * Configure Shibboleth OIDC authentication.

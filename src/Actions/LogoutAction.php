@@ -8,6 +8,6 @@ class LogoutAction
 {
     public function __invoke()
     {
-        return Oidc::driver('shib-oidc')->logout();
+        return Oidc::driver('uis-oidc')->logout();
     }
 }
