@@ -11,7 +11,7 @@ class CallbackHandleAction
 {
     public function __invoke()
     {
-        if (empty(Session::get('oidc.campus'))) {
+        if (Session::missing('oidc.campus')) {
             throw new \InvalidArgumentException('Campus not set');
         }
 

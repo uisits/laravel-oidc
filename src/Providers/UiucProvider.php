@@ -183,8 +183,6 @@ class UiucProvider extends AbstractOidcProvider
 
     protected function mapUserToObject(array $user): User
     {
-        dd($user);
-
         return (new User)->setRaw($user)->map([
             'uin' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')],
             'netid' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.netid')],
@@ -193,7 +191,7 @@ class UiucProvider extends AbstractOidcProvider
             'name' => $user['given_name'].' '.$user['family_name'],
             'email' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.email')],
             'password' => Hash::make($user[config('shibboleth-oidc.providers.uiuc.user-mapping.uin')].now()),
-            'groups' => $user['uicedu_is_member_of'],
+            'groups' => $user[config('shibboleth-oidc.providers.uiuc.user-mapping.groups')],
         ]);
     }
 

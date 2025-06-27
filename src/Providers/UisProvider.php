@@ -194,7 +194,7 @@ class UisProvider extends AbstractOidcProvider
             'name' => $user['given_name'].' '.$user['family_name'],
             'email' => $user[config('shibboleth-oidc.providers.uis.user-mapping.email')],
             'password' => Hash::make($user[config('shibboleth-oidc.providers.uis.user-mapping.uin')].now()),
-            'groups' => $user['uisedu_is_member_of'],
+            'groups' => $user[config('shibboleth-oidc.providers.uis.user-mapping.groups')],
         ]);
     }
 
