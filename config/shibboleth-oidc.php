@@ -67,7 +67,7 @@ return [
             'logout_url' => env('UIUC_OIDC_LOGOUT_URL', null),
             'redirect' => env('APP_URL').'/auth/callback',
             'user-mapping' => [
-                'uin' => 'uisedu_uin',
+                'uin' => 'itrust_uin',
                 'full_name' => 'full_name',
                 'first_name' => 'given_name',
                 'last_name' => 'family_name',
