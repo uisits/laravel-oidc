@@ -5,7 +5,8 @@ namespace UisIts\Oidc\Http\Middleware;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Session;
+use UisIts\Oidc\Facades\Oidc;
 use Symfony\Component\HttpFoundation\Response;
 
 class Introspect
@@ -26,7 +27,10 @@ class Introspect
             return new JsonResponse(['message' => 'Token not set!'], 401);
         }
 
-        $introspectResponse = Socialite::driver('shib-oidc')
+        throw_if(Session::missing('oidc.campus'), new \InvalidArgumentException('Campus not set'));
+
+        $campus = Session::get('oidc.campus');
+        $introspectResponse = Oidc::driver($campus)
             ->introspect($request->bearerToken());
 
         if (! $introspectResponse['active']) {
@@ -54,10 +58,5 @@ class Introspect
         if ($missingScopes->isNotEmpty()) {
             throw new \InvalidArgumentException("Missing scopes {$missingScopes->implode(',')}");
         }
-    }
-
-    public static function getUserFromToken(string $bearerToken): array
-    {
-        return Socialite::driver('shib-oidc')->getUserByToken($bearerToken);
     }
 }

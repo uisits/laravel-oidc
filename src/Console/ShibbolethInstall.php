@@ -4,6 +4,7 @@ namespace UisIts\Oidc\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ShibbolethInstall extends Command
 {
@@ -20,7 +21,7 @@ class ShibbolethInstall extends Command
      *
      * @var string
      */
-    protected $description = 'Install Shibboleth OIDC/SAML components.';
+    protected $description = 'Install Shibboleth OIDC components.';
 
     /**
      * Execute the console command.
@@ -30,19 +31,15 @@ class ShibbolethInstall extends Command
         // Install Spatie-Permissions package
         $this->requireComposerPackages('spatie/laravel-permission');
 
-        // Publish Spatie-Permission ServiceProvider
-        $this->callSilent('vendor:publish', ['--tag' => 'permission-config', '--force' => true]);
-        $this->callSilent('vendor:publish', ['--tag' => 'permission-migrations', '--force' => true]);
+        // Publish the assets to public folder
+        $this->publishTheAssetsToPublicFolder();
 
-        // publish config file
-        $this->callSilent('vendor:publish', ['--tag' => 'shib-config', '--force' => true]);
-        $this->info('Successfully published shibboleth configuration to: '.config_path('shibboleth.php'));
-        $this->newLine();
+        $this->publishSpatiePermissionServiceProvider();
 
-        // publish migration file
-        $this->callSilent('vendor:publish', ['--tag' => 'shib-migrations', '--force' => true]);
-        $this->info('Successfully published shibboleth migrations to: '.database_path());
-        $this->newLine();
+        $this->publishConfig();
+
+        // publish the migration file
+        $this->publishMigrations();
 
         $this->info('Please run your migrations using:');
         $this->warn('php artisan migrate');
@@ -66,5 +63,54 @@ class ShibbolethInstall extends Command
             ->run(function ($type, $output) {
                 $this->output->write($output);
             });
+    }
+
+    /**
+     * @return void
+     */
+    protected function publishSpatiePermissionServiceProvider(): void
+    {
+        // Publish Spatie-Permission ServiceProvider
+        $this->callSilent('vendor:publish', ['--tag' => 'permission-config', '--force' => true]);
+        $this->callSilent('vendor:publish', ['--tag' => 'permission-migrations', '--force' => true]);
+    }
+
+    /**
+     * @return void
+     */
+    protected function publishConfig(): void
+    {
+// publish the config file
+        $this->callSilent('vendor:publish', ['--tag' => 'shibboleth-config', '--force' => true]);
+        $this->info('Successfully published shibboleth configuration to: ' . config_path('shibboleth.php'));
+        $this->newLine();
+    }
+
+    /**
+     * @return void
+     */
+    protected function publishMigrations(): void
+    {
+        $this->callSilent('vendor:publish', ['--tag' => 'shibboleth-migrations', '--force' => true]);
+        $this->info('Successfully published shibboleth migrations to: ' . database_path());
+        $this->newLine();
+    }
+
+    /**
+     * @return void
+     */
+    protected function publishTheAssetsToPublicFolder(): void
+    {
+        $process = new Process([
+            'cp',
+            __DIR__ . '/../resources/images/illinois-system-logo.svg',
+            public_path('images/illinois-system-logo.svg')
+        ]);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        $this->info('Published the images to public folder.');
+        $this->newLine();
     }
 }
