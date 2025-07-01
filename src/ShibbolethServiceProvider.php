@@ -19,10 +19,14 @@ class ShibbolethServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
 
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'laravel-oidc');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-oidc');
 
         $this->publishes([
             __DIR__.'/../migrations' => database_path('migrations'),
+        ], 'shibboleth-migrations');
+
+        $this->publishes([
+            __DIR__.'/../../res' => database_path('migrations'),
         ], 'shibboleth-migrations');
 
         $this->publishes([

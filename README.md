@@ -1,81 +1,30 @@
 # Laravel Shibboleth
 
-This package extends the Laravel's first-party package socialite to authenticate and authorize using Shibboleth.
+Laravel Shibboleth is a comprehensive authentication package for Laravel applications that provides seamless integration with Shibboleth and OpenID Connect (OIDC) authentication protocols.
+This package supports OIDC authentication methods, allowing flexible implementation based on your organization's requirements.
+It includes features for user authorization via Spatie/permissions package, token introspection, and a simple installation process to get your authentication system up and running quickly.
+
+
 
 ## Usage:
 - Install the package:
 ```composer require uisits/laravel-oidc```
-- Optional: Add Service provider to `config/app.php` file.
-```UisIts/Oidc/ShibbolethServiceProvider::class```
+
+
 - **Important:** Install the package:
 ``` php artisan shibboleth:install```
+
+> Running this command performs the following actions:
+> - Installs `spatie/laravel-permission` in your app.
+> - Publish assets such as images, build assets to appropriate directories in your project.
+> - Publish the `shibboleth-oidc.php` config file to your config folder.
+> - Publish migrations.
+
 - Set environment variables in .env file (Check the `config/shibboleth.php` file)
+- For Tri-Campus authentication, set the environment variables as per the config file and set `'tri-campus-provider' => true,` in `config/shibboleth-oidc.php` file.
 
 #### Migrate database
 Run `php artisan migrate`
-
-> Note:
-> 
-> For Authorization set `APP_AD_AUTHORIZE_GROUP` in the .env file.
-> 
-> You can check user is admin using gates or directly using user model. ex:
-> 
-> ```php
-> In AuthServiceProvider:
-> Gate::define('admin', function (User $user) {
->    return $user->hasRole('admin');
-> });
-> 
-> To check if user is admin you can either use:
-> User::find()->hasRole
-> 
-> OR
-> 
-> Gate::allows('admin')
-> ```
-
-#### Using SAML authentication 
-- Set the SAML environment variables
-- Set the type property in `config/shibboleth.php` to ***saml***
-
-#### Using OIDC authentication
-- Set the OIDC environment variables
-- Set the type property in `config/shibboleth.php` to ***oidc***
-
-#### Set up authentication routes
-set the authentication routes in `routes/web.php` files
-```php
-use UisIts\Oidc\Http\Controllers\AuthController;
-
-Route::name('login')->get('login', [AuthController::class, 'login']);
-
-Route::name('callback')->get('/auth/callback', [AuthController::class, 'callback']);
-
-Route::name('logout')->get('/logout', [AuthController::class, 'logout']);
-```
-
-#### Authorization
-- Define the ad group name in the .env file
-- You can configure the redirect route to use after successfully authentication by overriding the `redirect_to` property in the `config/shibboleth.php` file. 
-- Set up the name of the group in `config/shibboleth.php` file under the `authorization` property
-  `'authorization' => env('APP_AD_AUTHORIZE_GROUP', null)`
-- Add the trait `HasRoles` to the `Users` model
-    ```php
-    use Spatie\Permission\Traits\HasRoles;
-    class User extends Authenticatable
-    {
-        use HasRoles;
-    }
-    ```
-- In your `app/AuthServiceProvider.php` file you can now assign Gates or check if user is admin anywhere in the application using the below logic:
-  ```php
-    # In AuthServiceProvider
-    Gate::define('admin', function (User $user) {
-        return $user->hasRole('admin');
-    });
-    # OR
-    $user->hasRole('admin');
-  ```
 
 You can extend the roles and permissions functionality to add new roles or permissions using [Spatie Permission package](https://spatie.be/docs/laravel-permission/v5/basic-usage/basic-usage)
 
@@ -122,4 +71,4 @@ You can run the tests for the package using pest.
 
 ## Issues and Concerns
 Please open an issue on the GitHub repository with detailed description and logs (if available).
-> In case of security concerns please write an email to [UIS ITS ADDS Team](uisappdevdl@uis.edu). 
+> In case of security concerns, please write an email to [UIS ITS ADDS Team](uisappdevdl@uis.edu). 

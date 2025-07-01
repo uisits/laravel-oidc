@@ -6,8 +6,8 @@ use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use UisIts\Oidc\Facades\Oidc;
 use Symfony\Component\HttpFoundation\Response;
+use UisIts\Oidc\Facades\Oidc;
 
 class Introspect
 {

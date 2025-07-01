@@ -3,8 +3,8 @@
 namespace UisIts\Oidc\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class ShibbolethInstall extends Command
 {
@@ -30,11 +30,10 @@ class ShibbolethInstall extends Command
     {
         // Install Spatie-Permissions package
         $this->requireComposerPackages('spatie/laravel-permission');
+        $this->publishSpatiePermissionServiceProvider();
 
         // Publish the assets to public folder
         $this->publishTheAssetsToPublicFolder();
-
-        $this->publishSpatiePermissionServiceProvider();
 
         $this->publishConfig();
 
@@ -65,9 +64,6 @@ class ShibbolethInstall extends Command
             });
     }
 
-    /**
-     * @return void
-     */
     protected function publishSpatiePermissionServiceProvider(): void
     {
         // Publish Spatie-Permission ServiceProvider
@@ -75,41 +71,47 @@ class ShibbolethInstall extends Command
         $this->callSilent('vendor:publish', ['--tag' => 'permission-migrations', '--force' => true]);
     }
 
-    /**
-     * @return void
-     */
     protected function publishConfig(): void
     {
-// publish the config file
+        // publish the config file
         $this->callSilent('vendor:publish', ['--tag' => 'shibboleth-config', '--force' => true]);
-        $this->info('Successfully published shibboleth configuration to: ' . config_path('shibboleth.php'));
+        $this->info('Successfully published shibboleth configuration to: '.config_path('shibboleth.php'));
         $this->newLine();
     }
 
-    /**
-     * @return void
-     */
     protected function publishMigrations(): void
     {
         $this->callSilent('vendor:publish', ['--tag' => 'shibboleth-migrations', '--force' => true]);
-        $this->info('Successfully published shibboleth migrations to: ' . database_path());
+        $this->info('Successfully published shibboleth migrations to: '.database_path());
         $this->newLine();
     }
 
-    /**
-     * @return void
-     */
     protected function publishTheAssetsToPublicFolder(): void
     {
-        $process = new Process([
-            'cp',
-            __DIR__ . '/../resources/images/illinois-system-logo.svg',
-            public_path('images/illinois-system-logo.svg')
-        ]);
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+        $files = [
+            [
+                'input' => __DIR__.'/../../resources/images/illinois-system-logo.svg',
+                'output' => public_path('images/illinois-system-logo.svg'),
+            ],
+            [
+                'input' => __DIR__.'/../../dist/shibboleth-oidc.css',
+                'output' => public_path('css/shibboleth-oidc.css'),
+            ],
+        ];
+
+        foreach ($files as $file) {
+            $process = new Process([
+                'cp',
+                $file['input'],
+                $file['output'],
+            ]);
+
+            $process->run();
+            if (! $process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
         }
+
         $this->info('Published the images to public folder.');
         $this->newLine();
     }
