@@ -26,12 +26,17 @@ class ShibbolethServiceProvider extends ServiceProvider
         ], 'shibboleth-migrations');
 
         $this->publishes([
-            __DIR__.'/../../res' => database_path('migrations'),
-        ], 'shibboleth-migrations');
+            __DIR__.'/../resources/views/tri-campus.blade.php' => resource_path('views/vendor/laravel-oidc/tri-campus.blade.php'),
+        ], 'shibboleth-views');
 
         $this->publishes([
             __DIR__.'/../config/shibboleth-oidc.php' => config_path('shibboleth-oidc.php'),
         ], 'shibboleth-config');
+
+        $this->publishes([
+            __DIR__.'/../resources/images/illinois-system-logo.svg' => public_path('images/illinois-system-logo.svg'),
+            __DIR__.'/../dist/shibboleth-oidc.css' => public_path('css/shibboleth-oidc.css'),
+        ], 'shibboleth-assets');
     }
 
     /**

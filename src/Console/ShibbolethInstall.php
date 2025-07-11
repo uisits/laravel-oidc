@@ -88,31 +88,9 @@ class ShibbolethInstall extends Command
 
     protected function publishTheAssetsToPublicFolder(): void
     {
-        $files = [
-            [
-                'input' => __DIR__.'/../../resources/images/illinois-system-logo.svg',
-                'output' => public_path('images/illinois-system-logo.svg'),
-            ],
-            [
-                'input' => __DIR__.'/../../dist/shibboleth-oidc.css',
-                'output' => public_path('css/shibboleth-oidc.css'),
-            ],
-        ];
+        $this->callSilent('vendor:publish', ['--tag' => 'shibboleth-assets', '--force' => true]);
 
-        foreach ($files as $file) {
-            $process = new Process([
-                'cp',
-                $file['input'],
-                $file['output'],
-            ]);
-
-            $process->run();
-            if (! $process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
-        }
-
-        $this->info('Published the images to public folder.');
+        $this->info('Published the assets to public folder.');
         $this->newLine();
     }
 }
