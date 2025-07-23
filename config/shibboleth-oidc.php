@@ -42,13 +42,13 @@ return [
             'logout_url' => env('UIC_OIDC_LOGOUT_URL', null),
             'redirect' => env('APP_URL').'/auth/callback',
             'user-mapping' => [
-                'uin' => 'uisedu_uin',
-                'full_name' => 'full_name',
+                'uin' => 'itrust_uin',
+                'full_name' => 'name',
                 'first_name' => 'given_name',
                 'last_name' => 'family_name',
                 'email' => 'email',
                 'netid' => 'preferred_username',
-                'groups' => 'uisedu_is_member_of',
+                'groups' => 'is_member_of',
             ],
             'introspect' => [
                 'introspect_url' => env('UIC_INTROSPECT_URL', null),

@@ -231,18 +231,13 @@ class UiucProvider extends AbstractOidcProvider
     {
         $user = Auth::user();
         throw_if(! $user, AuthenticationException::class);
-        $logout_url = config('shibboleth-oidc.providers.uiuc.logout_url');
-        $response = $this->getHttpClient()->get($logout_url, [
-            RequestOptions::HEADERS => ['Authorization' => 'Bearer '.$user->access_token],
-        ]);
-
-        if ($response->getStatusCode() === 200) {
+        $logoutUrl = config('shibboleth-oidc.providers.uiuc.logout_url');
+        try {
             Auth::logout();
             Session::flush();
-
-            return new RedirectResponse(config('shibboleth-oidc.providers.uiuc.logout_url'));
+        } catch (\Exception $exception) {
+            throw new InvalidLogoutException('User logout failed!');
         }
-
-        throw new InvalidLogoutException('User logout failed!');
+        return new RedirectResponse($logoutUrl);
     }
 }
