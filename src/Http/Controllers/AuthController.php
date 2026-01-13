@@ -3,6 +3,7 @@
 namespace UisIts\Oidc\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Spatie\Permission\Models\Role;
 
@@ -34,8 +35,8 @@ class AuthController
             'name' => $socialiteUser->name,
             'first_name' => $socialiteUser->first_name,
             'last_name' => $socialiteUser->last_name,
-            'netid' => $socialiteUser->netid,
-            'email' => $socialiteUser->email,
+            'netid' => Str::lower($socialiteUser->netid),
+            'email' => Str::lower($socialiteUser->email),
             'access_token' => $socialiteUser->token,
             'id_token' => $socialiteUser->idToken,
             'refresh_token' => $socialiteUser->refreshToken,
