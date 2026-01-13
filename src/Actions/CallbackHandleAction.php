@@ -4,6 +4,7 @@ namespace UisIts\Oidc\Actions;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use UisIts\Oidc\Enums\Campus;
 use UisIts\Oidc\Facades\Oidc;
 
@@ -31,8 +32,8 @@ class CallbackHandleAction
             'name' => $user->name,
             'first_name' => $user->firstName,
             'last_name' => $user->lastName,
-            'netid' => $user->netid,
-            'email' => $user->email,
+            'netid' => Str::lower($user->netid),
+            'email' => Str::lower($user->email),
             'access_token' => $user->token,
             'id_token' => $user->idToken,
             'refresh_token' => $user->refreshToken,
