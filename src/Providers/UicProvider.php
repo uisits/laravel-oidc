@@ -188,6 +188,7 @@ class UicProvider extends AbstractOidcProvider
             'netid' => $user[config('shibboleth-oidc.providers.uic.user-mapping.netid')],
             'firstName' => $user[config('shibboleth-oidc.providers.uic.user-mapping.first_name')],
             'lastName' => $user[config('shibboleth-oidc.providers.uic.user-mapping.last_name')],
+            'preferred_first_name' => $user[config('shibboleth-oidc.providers.uic.user-mapping.preferred_first_name')],
             'name' => $user['given_name'].' '.$user['family_name'],
             'email' => $user[config('shibboleth-oidc.providers.uic.user-mapping.email')],
             'password' => Hash::make($user[config('shibboleth-oidc.providers.uic.user-mapping.uin')].now()),
