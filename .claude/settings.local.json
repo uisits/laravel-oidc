@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git log *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\([p['name'] for p in d.get\\('packages-dev',[]\\)]\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\([p['name'] for p in d.get\\('packages',[]\\)]\\)\")",
+      "Bash(php --version)",
+      "Bash(composer install *)",
+      "Bash(./vendor/bin/pest --bail)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(./vendor/bin/pest)",
+      "Bash(php vendor/bin/pest)",
+      "Bash(php vendor/bin/pest --no-ansi)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(php vendor/bin/pest --colors=never)",
+      "Bash(php vendor/bin/pest --bail)",
+      "Read(//tmp/**)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(php *)",
+      "Bash(PHP_TERM=dumb TERM=dumb php vendor/bin/pest tests/Unit/ExampleTest.php)",
+      "Bash(xxd /tmp/pest_out3.txt)",
+      "Bash(stty -a)",
+      "Bash(echo \"---EXIT:$?---\")",
+      "Bash(python3 -c \"import sys; import xml.etree.ElementTree as ET; tree=ET.parse\\('/tmp/pest_junit_full.xml'\\); root=tree.getroot\\(\\); [print\\('FAIL:', tc.get\\('name'\\), tc.find\\('failure'\\).text[:200] if tc.find\\('failure'\\) is not None else 'ERROR:'+tc.find\\('error'\\).text[:200] if tc.find\\('error'\\) is not None else ''\\) for ts in root.iter\\('testcase'\\) for tc in [ts] if tc.find\\('failure'\\) is not None or tc.find\\('error'\\) is not None]\")",
+      "Bash(expect -c 'log_user 1; spawn php vendor/bin/pest tests/Feature/CallbackHandleActionTest.php; expect eof; catch {lassign [wait] pid exid type code}; puts \"EXIT:$code\"')",
+      "Bash(sed -n '95,120p' src/Providers/AbstractOidcProvider.php)",
+      "Bash(sed -n '236,260p' src/Providers/AbstractOidcProvider.php)"
+    ]
+  }
+}

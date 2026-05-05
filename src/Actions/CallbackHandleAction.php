@@ -32,6 +32,7 @@ class CallbackHandleAction
             'name' => $user->name,
             'first_name' => $user->firstName,
             'last_name' => $user->lastName,
+            'preferred_first_name' => $user->preferred_first_name,
             'netid' => Str::lower($user->netid),
             'email' => Str::lower($user->email),
             'access_token' => $user->token,

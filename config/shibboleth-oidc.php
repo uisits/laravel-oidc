@@ -21,6 +21,7 @@ return [
                 'full_name' => 'full_name',
                 'first_name' => 'given_name',
                 'last_name' => 'family_name',
+                'preferred_first_name' => 'preferred_first_name',
                 'email' => 'email',
                 'netid' => 'preferred_username',
                 'groups' => 'uisedu_is_member_of',
