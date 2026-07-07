@@ -186,16 +186,17 @@ class UisProvider extends AbstractOidcProvider
 
     protected function mapUserToObject(array $user): User
     {
-        return (new User)->setRaw($user)->map([
-            'uin' => $user[config('shibboleth-oidc.providers.uis.user-mapping.uin')],
-            'netid' => $user[config('shibboleth-oidc.providers.uis.user-mapping.netid')],
-            'firstName' => $user[config('shibboleth-oidc.providers.uis.user-mapping.first_name')],
-            'lastName' => $user[config('shibboleth-oidc.providers.uis.user-mapping.last_name')],
-            'preferred_first_name' => $user[config('shibboleth-oidc.providers.uis.user-mapping.preferred_first_name')],
-            'name' => $user['given_name'].' '.$user['family_name'],
-            'email' => $user[config('shibboleth-oidc.providers.uis.user-mapping.email')],
-            'password' => Hash::make($user[config('shibboleth-oidc.providers.uis.user-mapping.uin')].now()),
-            'groups' => $user[config('shibboleth-oidc.providers.uis.user-mapping.groups')],
+        $mapping = config('shibboleth-oidc.providers.uis.user-mapping');
+        return  (new User)->setRaw($user)->map([
+            'uin' => Arr::get($user, $mapping['uin']),
+            'netid' => Arr::get($user, $mapping['netid']),
+            'firstName' => Arr::get($user, $mapping['first_name']),
+            'lastName' => Arr::get($user, $mapping['last_name']),
+            'preferred_first_name' => Arr::get($user, $mapping['preferred_first_name']),
+            'name' => trim(Arr::get($user, 'given_name') . ' ' . Arr::get($user, 'family_name')),
+            'email' => Arr::get($user, $mapping['email']),
+            'password' => Hash::make(Arr::get($user, $mapping['uin']) . now()),
+            'groups' => Arr::get($user, $mapping['groups']),
         ]);
     }
 
