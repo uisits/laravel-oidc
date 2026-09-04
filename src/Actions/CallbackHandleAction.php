@@ -52,6 +52,6 @@ class CallbackHandleAction
     protected function getRedirectUrl(): string
     {
         return empty(config('shibboleth-oidc.redirect_to')) ?
-            '/' : config('shibboleth-oidc.providers.uis.redirect_to');
+            '/' : config('shibboleth-oidc.redirect_to');
     }
 }
